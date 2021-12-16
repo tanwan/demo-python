@@ -1,0 +1,19 @@
+{
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        ".",
+        "-p",
+        //文件匹配规则
+        "*.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": ["--line-length", "160"],
+    "python.linting.enabled": true,
+    "files.exclude": {
+        //忽略__pycache__文件夹
+        "**/__pycache__": true
+    }
+}
