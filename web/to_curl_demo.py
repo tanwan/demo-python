@@ -25,7 +25,7 @@ class HTTPRequest(BaseHTTPRequestHandler):
 def to_curl(raw_http_request):
     request = HTTPRequest(raw_http_request.strip())
     curl = f"curl --location --request {request.command} '{request.url}{request.path}' "
-    del request.headers["Content-Length"]
+    request.headers.pop("Content-Length", None)
     boundary = None
     for k, v in sorted(request.headers.items()):
         if k == "Content-Type" and v.startswith("multipart/form-data"):
