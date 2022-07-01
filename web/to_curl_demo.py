@@ -19,7 +19,7 @@ class HTTPRequest(BaseHTTPRequestHandler):
             self.data = None
 
         # Host
-        self.url = self.headers["Host"]
+        self.url = self.headers.get("Host", "<hostname>")
 
 
 def to_curl(raw_http_request):
