@@ -15,8 +15,8 @@ class PathDemo(unittest.TestCase):
         """Path是PurePath的子类"""
         # 传入相对路径,Path可以以当前工作路径得出绝对路径,而PurePath不行
         print(f"absolute path:{Path('path1', 'path2', 'path3').absolute()}")
-        # cwd获取当前工作路径,home获取用户路径
-        print(f"cwd:{Path.cwd()},home:{Path.home()}")
+        # cwd获取当前工作路径,home获取用户路径, expanduser可以解析~为绝对路径
+        print(f"cwd:{Path.cwd()},home:{Path.home()}, desktop: {os.path.expanduser('~/Desktop')}")
 
     def test_pure_path(self):
         """PurePath"""
@@ -41,6 +41,10 @@ class PathDemo(unittest.TestCase):
     def test_read(self):
         # 使用Path读取文件
         print(f"use path read:{Path(curdir / 'file/file').read_text()}")
+
+    def test_to_str(self):
+        s = Path(curdir).resolve()
+        print(f"tostr: {s}")
 
 
 class FileDemo(unittest.TestCase):
@@ -123,12 +127,3 @@ class ZipDemo(unittest.TestCase):
         zip.write(source_dir / "zip-file.zip", arcname="zip-file.zip", compress_type=zipfile.ZIP_DEFLATED)
         zip.write(source_dir / "file", arcname="file", compress_type=zipfile.ZIP_DEFLATED)
         zip.close()
-
-
-class OSDemo(unittest.TestCase):
-    def test_exec(self):
-        """执行指令"""
-        # 执行并返回结果
-        print(os.popen("ls").read())
-        # 只执行,不返回
-        os.system("ls")

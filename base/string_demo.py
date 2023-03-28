@@ -21,6 +21,10 @@ class StringDemo(unittest.TestCase):
         b = "value b"
         # 使用f可以使用字面量格式化字符串
         print(f"format use variable, {a},{b}")
+        # {}中还可以指定格式 03d表示3位数字,不够补0
+        i = 1
+        print(f"{i:03d}")
+        print("{0:03d}".format(i))
 
         str = """
         1234

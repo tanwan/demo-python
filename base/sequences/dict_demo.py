@@ -21,7 +21,11 @@ class DictDemo(unittest.TestCase):
         map.setdefault("k4", "v4")
         print(f"k3:{map['k3']},k4:{map['k4']}")
         # 删除
+        # 使用del, key必须存在才能删除,否则会报错
         del map["k4"]
+        print(f"k4:{map.get('k4')}")
+        # 使用pop, 会返回key对应的值, 可以多传一个默认值参数, 如果key不存在,则会返回这个默认值
+        map.pop("k4", None)
         print(f"k4:{map.get('k4')}")
 
         # 遍历, 使用items可以拿到key和value
