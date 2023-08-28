@@ -45,6 +45,7 @@ def decorator_with_wraps(func):
 
 
 def decorator_with_attr(**kw):
+    """这边使用了**kw,也可以直接使用参数名"""
     print("decorator_with_attr exec")
     # 这一层函数用来获取注解的属性
     def internal_decorator_attr(func):
