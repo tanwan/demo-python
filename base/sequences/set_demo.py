@@ -1,13 +1,22 @@
 import unittest
 
-lst = [(1, "a"), (2, "b"), (3, "c")]
-
 
 class SetDemo(unittest.TestCase):
     def test_base(self):
         """集合基本使用"""
-        set1 = {1, 2, 3}
+        set1 = {1, 2}
         set2 = {2, 3, 5}
+        # add
+        set1.add(3)
+        print("add:", set1)
+        # 多个使用update
+        set3 = {4, 5}
+        set3.update([1, 2, 3])
+        print("update:", set3)
+        # remove
+        set3.remove(1)
+        print("remove:", set3)
+
         lst = [2, 3, 5]
         # 空集合不能用{},它表示dict
         empty_set = set()
@@ -29,4 +38,5 @@ class SetDemo(unittest.TestCase):
     def test_comprehensions(self):
         """集合推导使用{}"""
         # 推导出set: {f(x) for i in seq}
+        lst = [(1, "a"), (2, "b"), (3, "c")]
         print({i[0] for i in lst})

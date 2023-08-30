@@ -6,11 +6,15 @@ import re
 class StringDemo(unittest.TestCase):
     def test_check(self):
         """判断"""
-        str = "hello World"
-        # not, in, startswith
-        print(f"not:{not ''},in:{'hello' in str},startswith:{str.startswith('hello')}")
+        str = "hello world"
+        # not, in, startswith, endswith
+        print(f"not:{not ''},in:{'hello' in str},startswith:{str.startswith('hello')}, endswith:{str.endswith('world')}")
         # 出现的次数
         print(f"count:{str.count('he')}")
+        # 查询index
+        print(f"index:{str.find('o')}")
+        # isalpha, isalnum
+        print(f"isalpha:{str.isalpha()},isalnum:{str.isalnum()}")
 
     def test_format(self):
         """字符串格式化"""
@@ -72,6 +76,7 @@ class StringDemo(unittest.TestCase):
         # r表示字符串是个正则表达式,re.M:多行匹配,re.I:忽略大小写
         match_obj = re.match(r"(.*) text (.*?) .*", str, re.M | re.I)
         if match_obj:
+            # span获取符合正则的起始和结束位置
             print(f"matchObj.span():{match_obj.span()}")
             print(f"matchObj.group():{match_obj.group()}")
             print(f"matchObj.group(1):{match_obj.group(1)}")

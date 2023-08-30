@@ -11,7 +11,10 @@ class ListDemo(unittest.TestCase):
         lst.append(2)
         # 在指定位置插入
         lst.insert(0, 3)
-        print(f"add list:{lst}")
+        print("add list:", lst)
+        # extend: 添加多个
+        lst.extend([2, 3, 4])
+        print("extend:", lst)
         # 修改
         lst[0] = 0
         print(f"modify list:{lst}")
@@ -25,6 +28,9 @@ class ListDemo(unittest.TestCase):
         # 使用remove,只删除第一个指定的值
         lst.remove(2)
         print(f"delete by remove,list:{lst}")
+        # clear: 清空list
+        lst.clear()
+        print("clear:", lst)
 
         lst = ["a", "b", "c", "d"]
         # 遍历只能拿到元素
@@ -88,8 +94,8 @@ class ListDemo(unittest.TestCase):
         print([x for x in lst if x % 2 == 0])
         # 有if和else的: [f(x) if condition else g(x) for x in seq]
         print([x if x % 2 == 0 else -1 for x in lst])
-        # 遍历二维数组:[j for i in seq for j in i if condition]
-        print([j for i in lst3 for j in i if j % 2 == 0])
+        # 遍历二维数组:[i for row in seq for i in row if condition]
+        print([i for row in lst3 for i in row if i % 2 == 0])
         # 遍历两列表,先遍历seq1,再遍历seq2: [f(i,j) for i in seq1 for j in seq2 if condition]
         print([(i, j) for i in lst for j in lst2 if i % 2 == 0])
 
@@ -125,6 +131,15 @@ class ListDemo(unittest.TestCase):
         # zip(*zip)就是zip的反向操作
         lst, lst2 = zip(*zip_list)
         print(f"unzip: lst:{lst},lst2:{lst2}")
+
+    def test_operation(self):
+        lst1 = [1, 2, 3]
+        lst2 = [4, 5]
+        # join
+        print("join:", lst1 + lst2)
+
+        # count
+        print("count", lst1.count(1))
 
     def test_random(self):
         lst = [1, 2, 3, 4, 5]

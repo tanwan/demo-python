@@ -13,6 +13,16 @@ class TupleDemo(unittest.TestCase):
         for i in tpe:
             print(i)
 
+        # in: 判断是否在元组中
+        print("in:", "a" in tpe)
+
+        # 转成list
+        lst = list(tpe)
+        print(f"to list: {lst}, type:{type(lst)}")
+        # 从list转成tuple
+        tpe = tuple(lst)
+        print(f"to tuple: {tpe}, type:{type(tpe)}")
+
     def test_unpacking(self):
         """元组拆包"""
         tpe = ("a", "b", "c")
@@ -35,6 +45,11 @@ class TupleDemo(unittest.TestCase):
         p = Point("a", "b", "c")
         # 属性只能访问,不能修改
         print(f"point:{p},p.x:{p.x},p.y:{p.y},p.z:{p.z}")
+
+    def test_slice(self):
+        """元组也可以切片"""
+        tpe = ("a", "b", "c", "d")
+        print("slice:", tpe[1:3])
 
 
 def func_tuple(a, b, c):
