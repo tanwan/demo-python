@@ -2,6 +2,9 @@
 ## 环境
 使用virtual env, 在terminal执行`python3 -m venv .venv`
 
+## pip镜像
+`pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/`
+
 ## 依赖
 `python -m pip install -r requirements.txt`: 安装requirements.txt的依赖
 `python -m pip freeze > requirements.txt`: 导出已安装的依赖到requirements.txt
