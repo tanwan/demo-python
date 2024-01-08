@@ -3,7 +3,7 @@ import json
 from types import SimpleNamespace
 from pathlib import Path
 
-file_dir = Path(__file__).parent / "file"
+file_dir = Path(__file__).parent / ".file"
 json_file = file_dir / "json.json"
 tmp_dir = file_dir / "tmp"
 

@@ -8,7 +8,7 @@ class PexpectDemo(unittest.TestCase):
     def test_pexpect_scp(self):
         """使用pexpect实现scp"""
         curdir = Path(__file__).parent
-        tmpDir = curdir / "file/tmp"
+        tmpDir = curdir / ".file/tmp"
         tmpDir.mkdir(parents=True, exist_ok=True)
 
 

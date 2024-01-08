@@ -2,14 +2,14 @@ import copy
 import unittest
 import functools
 import logging
-from pathlib import PurePath
+from pathlib import Path
 
 # python执行到import的时候,就会打开import的文件,然后将函数/类复制到这个程序中
 # 当使用unitest模板的函数/类时, 使用unittest. 如果给模块添加了别名import unitest as test,则使用test.即可
 # 可以使用from module_name import *,这样在使用的时候就不需要使用模块名的前缀了
 # 也可以导入特定的方法/类 from module_name import func, 这样就可以使用func()了, 还可以添加别名from module_name import func as f, 就可以使用f()
 
-curdir = PurePath(__file__).parent
+curdir = Path(__file__).parent
 
 
 class FunctionDemo(unittest.TestCase):
@@ -134,8 +134,12 @@ class BaseDemo(unittest.TestCase):
 class LoggerDemo(unittest.TestCase):
     def test_logging(self):
         """日志"""
+        tmp_dir = curdir / ".file/tmp"
+        tmp_dir.mkdir(parents=True, exist_ok=True)
         formatter = "%(asctime)s - %(levelname)s - %(message)s"
-        logging.basicConfig(filename=curdir / "file/tmp/log.log", level=logging.DEBUG, format=formatter)
+        logging.basicConfig(
+            filename=curdir / ".file/tmp/log.log", level=logging.DEBUG, format=formatter
+        )
         logger = logging.getLogger()
         ch = logging.StreamHandler()
         ch.setFormatter(logging.Formatter(formatter))

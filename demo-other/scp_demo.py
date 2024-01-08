@@ -4,7 +4,7 @@ from pathlib import Path
 from stat import  S_ISREG
 
 curdir = Path(__file__).parent
-tmpDir = curdir / "file/tmp/"
+tmpDir = curdir / ".file/tmp/"
 tmpDir.mkdir(parents=True, exist_ok=True)
 
 

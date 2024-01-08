@@ -1,12 +1,12 @@
 import unittest
-from pathlib import PurePath
+from pathlib import Path
 from lxml import etree
 
 
 class RequestDemo(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        with open(PurePath(__file__).parent / "file/simple.html") as file:
+        with open(Path(__file__).parent / ".file/simple.html") as file:
             cls.dom = etree.HTML(file.read())
 
     def test_base(self):
@@ -34,7 +34,6 @@ class RequestDemo(unittest.TestCase):
         # 可以从选择出来的节点再使用xpath进行选择
         body_div = body.xpath("div")
         print(f"body xpath: {body_div}")
-
 
     def test_value_attr(self):
         """值和属性"""

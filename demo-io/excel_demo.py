@@ -2,15 +2,15 @@ import unittest
 from openpyxl import load_workbook
 import xlrd
 import os
-from pathlib import PurePath
+from pathlib import Path
 
-curdir = PurePath(__file__).parent
+curdir = Path(__file__).parent
 
 
 class ExcelTest(unittest.TestCase):
     def test_read_xlsx(self):
         """07版本,使用openpyxl"""
-        wb = load_workbook(f"{curdir}/file/demo.xlsx")
+        wb = load_workbook(f"{curdir}/.file/demo.xlsx")
         # 所有的sheet的名称
         print(f"sheet names:{wb.sheetnames}")
 
@@ -59,7 +59,7 @@ class ExcelTest(unittest.TestCase):
 
     def test_read_xls(self):
         """03版本,使用xlrd"""
-        wb = xlrd.open_workbook(f"{curdir}/file/demo.xls")
+        wb = xlrd.open_workbook(f"{curdir}/.file/demo.xls")
         # wb.sheet_names()所有的sheet的名称
         print(f"sheet names:{wb.sheet_names()}")
 

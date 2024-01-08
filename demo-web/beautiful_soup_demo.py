@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import unittest
 import re
-from pathlib import PurePath
+from pathlib import Path
 
 
 class BeautifulSoupDemo(unittest.TestCase):
@@ -9,7 +9,7 @@ class BeautifulSoupDemo(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         """setUpClass: beforeClass,需要使用@classmethod,setUp:beforeEach"""
-        with open(PurePath(__file__).parent / "file/simple.html") as file:
+        with open(Path(__file__).parent / ".file/simple.html") as file:
             # html.parser:python内置的解析器,lxml:解析速度快,需要install lxml
             self.soup = BeautifulSoup(file.read(), features="lxml")
 

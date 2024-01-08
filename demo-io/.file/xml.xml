@@ -1,0 +1,10 @@
+<root xmlns="ns">
+    <animals>
+        <dog age="1">dog1</dog>
+        <dog age="2">dog2</dog>
+    </animals>
+    <animals>
+        <cat age="1">cat1</cat>
+        <cat age="2">cat2</cat>
+    </animals>
+</root>
