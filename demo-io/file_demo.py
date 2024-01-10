@@ -1,22 +1,30 @@
 import unittest
 import os
 from pathlib import Path
-import shutil
+from .shutil_demo import ShutilDemo
+from .os_demo import OSDemo
+from .path_demo import PathDemo
 
 # __file__是当前脚本所在的路径
 curdir = Path(__file__).parent
-file_dir = curdir/".file"
+file_dir = curdir / ".file"
 tmp_dir = Path(file_dir / "tmp")
 tmp_dir.mkdir(parents=True, exist_ok=True)
 original_workdir = os.getcwd()
+shutil_demo = ShutilDemo()
+os_demo = OSDemo()
+path_demo = PathDemo()
 
 
 class FileDemo(unittest.TestCase):
     def test_walk(self):
         """使用os.walk递归遍历文件夹下的所有文件"""
         # root是遍历时的root路径, dirs是root底下所有的目录, files是root下面所有的文件
-        for root, dirs, files in os.walk(curdir):
+        for root, dirs, files in os.walk(file_dir):
             for file in files:
+                # 使用Path拼接路径
+                print(Path(root, file))
+                # 使用os.path.join拼接路径
                 print(f"file:{os.path.join(root, file)}")
             # 如果要过滤一些文件夹,可以把要过滤的文件夹从dirs删除掉
             for dir in dirs:
@@ -44,30 +52,39 @@ class FileDemo(unittest.TestCase):
         with open(tmp_dir / "tmp", "w") as file:
             file.write("write content")
 
+    @unittest.skip("在相应的测试类执行")
+    def test_copy(self):
+        """复制文件(夹)"""
+        # 复制文件
+        shutil_demo.test_copy()
+        shutil_demo.test_copyfile()
+        # 复制文件夹
+        shutil_demo.test_copytree()
 
-class OSDemo(unittest.TestCase):
-    def setUp(self) -> None:
-        os.chdir(file_dir)
-        print(f"work directory: {os.getcwd()}")
-
-    def tearDown(self) -> None:
-        os.chdir(original_workdir)
-
-    def test_makedirs(self):
+    @unittest.skip("在相应的测试类执行")
+    def test_create_dir(self):
         """创建文件夹"""
-        # 创建文件夹, 中间文件夹也会创建, 使用exist_ok=True允许文件夹已经存在
-        if not os.path.exists("tmp/dir1/dir2"):
-            os.makedirs("tmp/dir1/dir2", exist_ok=True)
+        os_demo.test_makedirs()
+        path_demo.test_mkdir()
 
-    def test_symlink(self):
-        """创建软链接"""
-        link = "tmp/link"
-        if os.path.islink(link):
-            os.unlink(link)
-        # src: 绝对路径, dest: 支持相对路径
-        os.symlink(file_dir/"dir", link)
+    @unittest.skip("在相应的测试类执行")
+    def test_remove(self):
+        """删除文件(夹)"""
+        # 删除文件
+        os_demo.test_remove()
+        # 删除文件夹(空/非空)
+        shutil_demo.test_rmtree()
+        # 删除空文件夹
+        os_demo.test_rmdir()
 
+    @unittest.skip("在相应的测试类执行")
+    def test_move(self):
+        """移动/重命名文件(夹)"""
+        os_demo.test_rename()
+        shutil_demo.test_move()
+    
+    @unittest.skip("在相应的测试类执行")
     def test_file_stat(self):
         """获取文件属性"""
-        file_stat = os.stat("dir/file")
-        print(f"create time:{file_stat.st_ctime}, modify time:{file_stat.st_mtime}, size:{file_stat.st_size}")
+        os_demo.test_file_stat()
+        path_demo.test_file_stat()

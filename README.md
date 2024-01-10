@@ -22,6 +22,8 @@ vscode这边是借助Python Test Explorer for Visual Studio Code这个插件来�
 直接运行test方法即可
 
 ## 格式化
-使用black,pycharm配置参考https://black.readthedocs.io/en/stable/integrations/editors.html  
+使用black
+vscode安装:[Black Formatter](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter)  
+pycharm配置参考https://black.readthedocs.io/en/stable/integrations/editors.html  
 行数限制的话,在black的参数"$FilePath$"后面添加`-l 160`
 

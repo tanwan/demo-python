@@ -37,7 +37,7 @@ class ShutilDemo(unittest.TestCase):
 
     def test_rmtree(self):
         """删除文件夹"""
-        # 删除文件夹, src必须是存在的文件夹,,支持相对路径, 如果不存在还需要忽略错误, 则使用ignore_errors=True, 清空文件夹使用先删除文件夹再创建实现
+        # 删除文件夹, src必须是存在的文件夹,支持相对路径, 如果不存在还需要忽略错误, 则使用ignore_errors=True, 清空文件夹使用先删除文件夹再创建实现
         shutil.rmtree("tmp", ignore_errors=True)
 
     def test_move(self):
