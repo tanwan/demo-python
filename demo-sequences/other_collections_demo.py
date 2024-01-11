@@ -4,17 +4,17 @@ import array
 import collections
 
 
-class CollectionsDemo(unittest.TestCase):
+class OtherCollectionsDemo(unittest.TestCase):
     def test_range(self):
         """range"""
         # 1,2,3,4
         for i in range(1, 5):
-            print(f"range step=1,i:{i}")
+            print("range step=1,i:", i)
         # 1,3
         for i in range(1, 5, 2):
-            print(f"range step=2,i:{i}")
+            print("range step=2,i", i)
         # 使用list()转换为list
-        print(f"convert to list:{list(range(1,5))}")
+        print("to list:", list(range(1, 5)))
 
     def test_bisect(self):
         """插入后保持lst是有序的"""
@@ -22,7 +22,7 @@ class CollectionsDemo(unittest.TestCase):
         bisect.insort(lst, "d")
         bisect.insort(lst, "c")
         bisect.insort(lst, "f")
-        print(f"lst:{lst}")
+        print(lst)
 
     def test_array(self):
         """
@@ -34,7 +34,7 @@ class CollectionsDemo(unittest.TestCase):
         lst.append(3)
         lst.append(4)
         lst.append(2)
-        print(f"list:{lst}")
+        print(lst)
 
     def test_deque(self):
         """双端队列,队列满了会丢弃队首的数据"""
@@ -43,4 +43,4 @@ class CollectionsDemo(unittest.TestCase):
         q.append(2)
         q.append(3)
         q.append(4)
-        print(f"queue:{q}")
+        print(q)
