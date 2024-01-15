@@ -2,6 +2,7 @@ import re
 import unittest
 from http.server import BaseHTTPRequestHandler
 from io import BytesIO
+import pyperclip
 
 
 class HTTPRequest(BaseHTTPRequestHandler):
@@ -23,7 +24,11 @@ class HTTPRequest(BaseHTTPRequestHandler):
 
 
 def to_curl(raw_http_request):
+    clipboard = raw_http_request is None
+    if clipboard:
+        raw_http_request = pyperclip.paste()
     request = HTTPRequest(raw_http_request.strip())
+    print(raw_http_request)
     curl = f"curl --location --request {request.command} '{request.url}{request.path}' "
     request.headers.pop("Content-Length", None)
     boundary = None
@@ -47,7 +52,14 @@ def to_curl(raw_http_request):
             if isinstance(data, bytes):
                 data = data.decode("utf-8")
             curl += f"-d '{data}'"
-    return curl
+    if clipboard:
+        pyperclip.copy(curl)
+    print("\n" + curl)
+
+
+if __name__ == "__main__":
+    # 可以在.zshrc中指定: alias tocurl="python to_curl_demo.py(使用绝对路径)", 就可以直接使用tocurl将剪切板的内容转为curl
+    to_curl(None)
 
 
 class ToCurlDemo(unittest.TestCase):
@@ -68,5 +80,5 @@ Accept-Encoding: gzip, deflate, br
 Accept-Language: zh,en-US;q=0.9,en;q=0.8,zh-CN;q=0.7
 
 {"username":"admin","password":"12345678"}
-        """
-        print(to_curl(str))
+"""
+        to_curl(str)
