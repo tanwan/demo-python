@@ -1,13 +1,23 @@
 # demo-python
 ## 环境
-使用virtual env, 在terminal执行`python3 -m venv .venv`
+### 使用virtual env  
+`python -m venv .venv`: 在.venv文件夹创建虚拟环境  
+vscode: .vscode/settings.json添加`"python.defaultInterpreterPath":".venv/bin/python"`
 
-## pip镜像
+### pip镜像
 `pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/`
 
-## 依赖
-`python -m pip install -r requirements.txt`: 安装requirements.txt的依赖
-`python -m pip freeze > requirements.txt`: 导出已安装的依赖到requirements.txt
+### 依赖
+`pip install -r requirements.txt`: 安装requirements.txt的依赖
+`pip freeze > requirements.txt`: 导出已安装的依赖到requirements.txt  
+在安装依赖的过程中, 如果有遇到"Failed building wheel for xxxx"的错误, 可能是requirements.txt定义的版本太旧了, 可以到[pypi](https://pypi.org/search) 搜索最新的版本
+
+#### 升级
+升级pip: `pip install --upgrade pip`  
+升级所有的包: `pip freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U`  
+查看可以升级的包: `pip list --outdated`  
+升级后记得再写入requirements.txt
+
 
 ## 执行
 ### 执行整个脚本文件

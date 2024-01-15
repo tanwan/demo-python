@@ -78,5 +78,7 @@ def simple_cookies(request: Request, response: Response, simple_cookie: Optional
 
 if __name__ == "__main__":
     """启动"""
+    # 使用uvicorn作为fastapi的服务器
+    # uvicorn是一个ASGI服务器(一个介于网络协议服务和Python应用之间的标准接口,能够处理多种通用的协议类型,包括HTTP/HTTP2和WebSocket)
     # 这边的fastapi_demo:app是当前文件名和FastAPI()的实例名称
     uvicorn.run(app="fastapi_demo:app", host="0.0.0.0", port=8080)

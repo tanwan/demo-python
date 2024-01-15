@@ -5,13 +5,15 @@ from mitmproxy.script import concurrent
 import json
 import time
 
-# 可以直接在脚本声明方法, 也可以使用addons的方法
+# mitmproxy的插件有两种方式
+# 1. 完整的Addon类
+# 2. 简化的脚本语法(将整个模块当做是一个插件对象）
+
+
+# 简化的脚本语法, 只需要定义request/response方法
 def request(flow: http.HTTPFlow) -> None:
     """请求的入口"""
-    # 启动后使用按E可以查看到日志
-    # host: 域名/ip, path: 请求path(以/开头)和地址栏参数, 需要去掉地址栏参数才能拿到path
     ctx.log.info(f"host:{flow.request.host}, path:{flow.request.path.split('?')[0]}")
-
     # pretty_host: 优先使用请求头的Host的值, pretty_url: 同pretty_host
     ctx.log.info(f"pretty_host:{flow.request.pretty_host}, pretty_url:{flow.request.pretty_url}")
 
@@ -22,10 +24,12 @@ def response(flow: http.HTTPFlow):
     ctx.log.info(f"content:{flow.response.content},{type(flow.response.content)}")
 
 
+# 完整的Addon类
 class RedirectAddon:
     def request(self, flow: http.HTTPFlow):
-        """修改scehme, host, port, path, method"""
-        if flow.request.path.split("?")[0] == "test_redirect":
+        """修改scehmehost, port, path, method"""
+        # path是包括query param的
+        if flow.request.path.split("?")[0].endswith("test_redirect"):
             flow.request.scheme = "http"
             flow.request.host = "localhost"
             flow.request.port = 8080
@@ -117,46 +121,22 @@ class ResponseAddon:
             flow.response.content = flow.response.content.replace(b"required value", b"mitm value")
 
 
-class ProxyAddon:
+class ProxyAsServerAddon:
     def request(self, flow: http.HTTPFlow) -> None:
-        if flow.request.path == "/rest/proxy":
+        if flow.request.path == "/rest/proxy_as_server":
             # 直接给response赋值
             flow.response = http.Response.make(200, b'{"k1":"v1","k2":"v2"}', {"Content-Type": "application/json"})
 
 
-class ConcurrentAddon:
-    # 目前有bug,用不了
-    # @concurrent
-    def request(self, flow: http.HTTPFlow) -> None:
-        if flow.request.query.get("addon") == "concurrent":
-            key = flow.request.query.get("required_query_parameters")
-            ctx.log.info(f"{time.time()},{key} start")
-            time.sleep(5)
-            ctx.log.info(f"{time.time()},{key} end")
-
-
-# 也可以使用addons的方法,addons类中的方法跟直接在脚本声明的方法是一样的
-addons = [
-    RedirectAddon(),
-    QueryParameters(),
-    RequestBodyAddon(),
-    RequestFormAddon(),
-    HeaderAddon(),
-    CookieAddon(),
-    ResponseAddon(),
-    ProxyAddon(),
-    ConcurrentAddon(),
-]
+# 使用addon, 需要添加addon的实例添加到addons列表中
+addons = [RedirectAddon(), QueryParameters(), RequestBodyAddon(), RequestFormAddon(), HeaderAddon(), CookieAddon(), ResponseAddon(), ProxyAsServerAddon()]
 
 
 # 直接执行此脚本,会启动mitmweb,这样就可以debug
 if __name__ == "__main__":
     import sys
 
-    # 也可以使用mitmproxy
-    # mitmproxy要求interactive shell environment
-    # 在pycharm中需要使用terminal进行启动: python web/mitmproxy_script.py
-    # 所以这边先使用mitmweb
+    # 也可以使用mitmproxy, mitmproxy要求interactive shell environment(交互式shell), 交互式shell在pycharm中需要使用terminal进行启动: python web/mitmproxy_script.py
     from mitmproxy.tools.main import mitmweb
 
     # 使用当前脚本当成mitmweb的脚本

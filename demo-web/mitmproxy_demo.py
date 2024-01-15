@@ -3,25 +3,26 @@ import unittest
 import json
 import requests.utils
 
-# 调用fastapi_demo.py的启动的后端, 代理使用mitmproxy.scipt.py
+# 需要先启动fastapi_demo.py(后端)和mitmproxy_scipt.py(代理)
+
 host = "http://127.0.0.1:8080/rest"
 
-proxies = {"http": "127.0.0.1:18888"}
+proxies = {"http": "http://127.0.0.1:18888"}
 
 
 class MitmproxyDemo(unittest.TestCase):
     def test_redirect(self):
-        """修改scehme, host, port, path, method"""
+        """修改scehme, host, port, path, method See RedirectAddon"""
         res = requests.get(f"{host}/test_redirect", proxies=proxies)
         print(res.text)
 
     def test_query_parameters(self):
-        """修改请求参数"""
+        """修改请求参数 See QueryParameters"""
         res = requests.get(f"{host}/get/path?required_query_parameters=required value&addon=query_parameters", proxies=proxies)
         print(res.text)
 
     def test_request_body(self):
-        """修改请求体"""
+        """修改请求体 See RequestBodyAddon"""
         payload = json.dumps({"required_field": "required value"})
         res = requests.post(f"{host}/post?addon=request_body", data=payload, proxies=proxies)
         print(f"result:{res.json()}")
@@ -29,7 +30,7 @@ class MitmproxyDemo(unittest.TestCase):
         print(f"result:{res.json()}")
 
     def test_form(self):
-        """修改form表单"""
+        """修改form表单 See RequestFormAddon"""
         # application/x-www-form-urlencoded
         payload = "form_field=form field value&k2=v2"
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
@@ -42,7 +43,7 @@ class MitmproxyDemo(unittest.TestCase):
         print(res.text)
 
     def test_header(self):
-        """修改header"""
+        """修改header See HeaderAddon"""
         headers = {"simple-header": "simple header value", "delete-header": "delete"}
         res = requests.get(f"{host}/headers?addon=header", headers=headers, proxies=proxies)
         # 响应头
@@ -50,7 +51,7 @@ class MitmproxyDemo(unittest.TestCase):
         print(res.text)
 
     def test_cookie(self):
-        """修改cookie"""
+        """修改cookie CookieAddon"""
         cookies = {"simple_cookie": "simple cookie value", "delete_cookie": "cookie"}
         res = requests.get(f"{host}/cookies?addon=cookie", cookies=cookies, proxies=proxies)
         # 响应的cookie
@@ -58,21 +59,14 @@ class MitmproxyDemo(unittest.TestCase):
         print(res.text)
 
     def test_response(self):
-        """修改响应"""
+        """修改响应 ResponseAddon"""
         payload = json.dumps({"required_field": "required value"})
         res = requests.post(f"{host}/post?addon=response_body", data=payload, proxies=proxies)
         print(f"result:{res.json()}")
         res = requests.post(f"{host}/post?addon=response_body_replace", data=payload, proxies=proxies)
         print(f"result:{res.json()}")
 
-    def test_proxy(self):
-        """mitm直接当成代理"""
-        res = requests.post(f"{host}/proxy", proxies=proxies)
+    def test_proxy_as_server(self):
+        """mitm当成服务器,直接给出响应 ProxyAsServerAddon"""
+        res = requests.post(f"{host}/proxy_as_server", proxies=proxies)
         print(f"result:{res.json()}")
-
-    def test_concurrent(self):
-        """并发"""
-        res = requests.get(f"{host}/get/path?required_query_parameters=first&addon=concurrent", proxies=proxies)
-        print(res.text)
-        res = requests.get(f"{host}/get/path?required_query_parameters=second&addon=concurrent", proxies=proxies)
-        print(res.text)
