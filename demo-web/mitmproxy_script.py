@@ -128,7 +128,7 @@ class ProxyAsServerAddon:
             flow.response = http.Response.make(200, b'{"k1":"v1","k2":"v2"}', {"Content-Type": "application/json"})
 
 
-# 使用addon, 需要添加addon的实例添加到addons列表中
+# 使用addon, 需要添加addon的实例到addons列表中
 addons = [RedirectAddon(), QueryParameters(), RequestBodyAddon(), RequestFormAddon(), HeaderAddon(), CookieAddon(), ResponseAddon(), ProxyAsServerAddon()]
 
 
