@@ -20,28 +20,36 @@ class FunctionalDemo(unittest.TestCase):
         # 初始值默认为list的第一个元素,也可以通过initial指定
         print(functools.reduce(lambda a, b: a + b, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
 
+    def test_partial(self):
+        """partial可以为lambda给定默认参数,然后生成新的lambda"""
+        three_param = lambda a, b, c: a + b + c
+        # 默认参数1,2
+        partial = functools.partial(three_param, 1, 2)
+        print(partial(3))
+        # 默认参数2
+        print(functools.partial(operator.mul, 2)(3))
+
     def test_operator(self):
-        """使用operator来减少一些常用的lambda表达式"""
+        """
+        使用operator来减少一些常用的lambda表达式
+        operator提供了一些简单的运算, 比如add|mul|pow
+        operator.itemgetter(k): lambda x: x[k], 可以用在元组列表的排序
+        operator.attrgetter(attr) : lambda x:x.attr, 可以用在类列表的排序
+        """
         # 使用add
-        reduce_result = functools.reduce(operator.add, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-        print(f"reduce add:{reduce_result}")
+        print("reduce add:", functools.reduce(operator.add, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]))
 
-        # 使用mul
-        # partial相当于是给func给了默认参数,mul本来需要2个参数,被partial包装后的函数,只需要1个参数
-        map_list = [i for i in map(functools.partial(operator.mul, 2), [1, 2, 3])]
-        print(f"map mul:{map_list}")
+        # operator.itemgetter, 相当于tuple/list的第二个元素
+        print(operator.itemgetter(1)((1, 2, 3)))
 
-        # operator.itemgetter返回一个函数
-        # itemgetter(1)相当于lambda x:x[1]
-        # itemgetter(1,2)相当于lambda x:(x[1],x[2])
-        lst = [(1, "b"), (2, "a")]
-        lst.sort(key=operator.itemgetter(1))
-        print(f"use itemgetter sort:{lst}")
+        # operator.attrgetter, 相当于obj.attr
+        print(operator.attrgetter("attr")(AttrClass("value")))
 
-        # operator.attrgetter返回一个函数
-        # attrgetter("k1")相当于lambda x:x["k1"]
-        # attrgetter("k1","k2")相当于lambda x:(x["k1"],x["k2"])
-        Simple = namedtuple("Simple", ["k1", "k2"])
-        lst = [Simple(1, "b"), Simple(2, "a")]
-        lst.sort(key = operator.attrgetter("k2"))
-        print(f"use attrgetter sort:{lst}")
+
+class AttrClass:
+    def __init__(self, attr):
+        self._attr = attr
+
+    @property
+    def attr(self):
+        return self._attr
