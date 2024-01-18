@@ -1,4 +1,6 @@
 import unittest
+import copy
+
 
 # 表示继承了TestCase,使用super()可以调用到父类
 class ClassDemo(unittest.TestCase):
@@ -34,6 +36,23 @@ class ClassDemo(unittest.TestCase):
         """测试继承"""
         child = Child("prop value")
         child.parent_prop()
+
+    def test_copy(self):
+        """
+        浅复制: copy.copy
+        深复制: copy.deepcopy
+        """
+        lst = [SimpleClass("")]
+        # 浅复制
+        shallow_copy = copy.copy(lst)
+        shallow_copy[0]._prop2 = "simple_copy value"
+        self.assertEqual("simple_copy value", lst[0].prop2)
+
+        # 深复制
+        lst = [SimpleClass("")]
+        deep_copy = copy.deepcopy(lst)
+        deep_copy[0]._prop2 = "deep_copy value"
+        self.assertEqual("prop2 value", lst[0].prop2)
 
 
 class SimpleClass:

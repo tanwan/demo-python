@@ -193,6 +193,15 @@ class ListDemo(unittest.TestCase):
         # 有多个参数,则不能省略()
         func_two_arg((x * 2 for x in lst), "arg2")
 
+    def test_unpacking(self):
+        """list拆包"""
+        lst = ["a", "b", "c", "d", "e"]
+        # _占位符用来忽略不关注的值, 加*的参数表示获取元组剩余的元素
+        a, *rest, d, _ = lst
+        self.assertEqual("a", a)
+        self.assertEqual("d", d)
+        print("*c: ", rest)
+
 
 def func_one_arg(arg):
     for i in arg:

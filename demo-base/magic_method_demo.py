@@ -5,6 +5,7 @@ class MagicMethodDemo(unittest.TestCase):
     def test_magic_method(self):
         """
         魔术方法
+        ==: __eq__
         len: __len__
         [index]: __getitem__
         str: __str__
@@ -19,6 +20,8 @@ class MagicMethodDemo(unittest.TestCase):
         obj.test_values.append(1)
         other.test_values.append(10)
 
+        self.assertFalse(obj == other)
+
         print("len:", len(obj))
         print("getitem:", obj[0])
         print("str:", obj)
@@ -31,6 +34,20 @@ class MagicMethodDemo(unittest.TestCase):
         for i in obj:
             print(i)
 
+    def test_equal(self):
+        """
+        判断相等
+        ==判断相等
+        is判断是否是同一个对象
+        """
+
+        a = SimpleMagicMethod()
+        b = SimpleMagicMethod()
+        # ==判断相等,调用__eq__方法
+        self.assertTrue(a == b)
+        # is判断是否是同一个对象
+        self.assertFalse(a is b)
+
 
 class SimpleMagicMethod:
     def __init__(self):
@@ -41,6 +58,11 @@ class SimpleMagicMethod:
     魔术方法是为了被python解释器调用
     使用__开头和__结尾
     """
+
+    def __eq__(self, __o):
+        """用来支持==判断相等的"""
+        print("__eq__ exec")
+        return self.test_values == __o.test_values
 
     def __len__(self):
         """用来支持len方法"""
