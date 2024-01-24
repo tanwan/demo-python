@@ -10,41 +10,56 @@ tmp_dir = file_dir / "tmp"
 
 class JsonDemo(unittest.TestCase):
     def test_read_json(self):
-        """反序列化,json只能反序列化简单的数据类型,比如list,dict,string,int等"""
+        """
+        反序列化
+        json只能反序列化简单的数据类型,比如list,dict,string,int等
+        json.load: 从文件读取
+        json.loads: 从字符串读取
+        """
+        # 从json文件读取json为dict
         with open(json_file) as f:
-            # 使用json load读取json文件
             json_dict = json.load(f)
-            print(f"json load, dict type:{type(json_dict)}, dict:{json_dict}")
+            self.assertTrue(isinstance(json_dict, dict))
+            print("dict:", json_dict)
 
-        json_str = json_file.read_text()
-        # 使用json.loads读取json字符串
-        json_dict = json.loads(json_str)
-        print(f"json loads dict type:{type(json_dict)}, dict:{json_dict}")
+        # 从json字符串读取json为dict
+        json_dict = json.loads(json_file.read_text())
+        self.assertTrue(isinstance(json_dict, dict))
+        print("dict:", json_dict)
 
     def test_write_json(self):
-        """序列化,json只能序列化简单的数据类型,比如list,dict,string,int等"""
+        """
+        序列化
+        json只能序列化简单的数据类型,比如list,dict,string,int等
+        json.dump: 转为json字符串
+        json.dumps: 转为json文件
+        """
         map = {"name": "outer", "inner": {"k1": "v1", "k2": "v2"}}
-        # 把dict转为json,indent添加缩进,格式化比较好看
-        print(f"json dumps: {json.dumps(map, indent=4)}")
 
+        # 把dict转为json字符串,indent添加缩进,格式化比较好看
+        print("json dumps: ", json.dumps(map, indent=4))
+
+        # 把dict转为json文件
         with open(tmp_dir / "json.json", "w") as f:
             json.dump(map, f, indent=4)
 
     def test_read_obj_json(self):
         """反序列化复杂对象"""
-        json_str = json_file.read_text()
-        map = json.loads(json_str)
+        # 先序列化为dict
+        map = json.loads(json_file.read_text())
+        # 通过dict创建复杂对象
         outer = Outer(**map)
-        print(f"{outer}")
+        print(outer)
 
     def test_write_obj_json(self):
         """序列化复杂对象"""
         inner = Inner("v1", "v2")
         outer = Outer("outer", inner.__dict__)
         # Inner的属性都是基本数据类型,所以使用__dict__也可以直接序列化
-        print(f"json dumps inner obj {json.dumps(inner.__dict__,indent=4)}")
+        print("json dumps inner obj:", json.dumps(inner.__dict__, indent=4))
+
         # Outer的属性没有都是基本数据类型,所以无法直接序列化,这边要多指定一个default参数,当遇到无法序列化的对象会调用它
-        print(f"json dumps outer obj {json.dumps(outer,default=lambda o: o.__dict__,indent=4)}")
+        print("json dumps outer obj:", json.dumps(outer, default=lambda o: o.__dict__, indent=4))
 
 
 # 需要序列化的类的属性就不要用下划线开头了

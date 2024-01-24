@@ -1,3 +1,4 @@
+from typing import Any
 import unittest
 
 
@@ -14,6 +15,7 @@ class MagicMethodDemo(unittest.TestCase):
         *: __mul__
         bool: __bool__
         iter: __iter__
+        instance(): __call__
         """
         obj = SimpleMagicMethod()
         other = SimpleMagicMethod()
@@ -30,6 +32,7 @@ class MagicMethodDemo(unittest.TestCase):
         print("iadd:", obj)
         print("mul:", obj * 2)
         print("bool:", bool(obj))
+        print("ojb():", obj())
 
         for i in obj:
             print(i)
@@ -113,3 +116,8 @@ class SimpleMagicMethod:
         """支持判断"""
         print("__bool__ exec")
         return bool(self.test_values)
+
+    def __call__(self, *args, **kwds):
+        """直接调用实例"""
+        print("__call__ exec")
+        return "call"
