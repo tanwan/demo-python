@@ -3,7 +3,8 @@ from mitmproxy import ctx
 from mitmproxy.coretypes import multidict
 from mitmproxy.script import concurrent
 import json
-import time
+from multiprocessing import Process
+import psutil
 
 # mitmproxy的插件有两种方式
 # 1. 完整的Addon类
@@ -134,13 +135,28 @@ addons = [RedirectAddon(), QueryParameters(), RequestBodyAddon(), RequestFormAdd
 
 # 直接执行此脚本,会启动mitmweb,这样就可以debug
 if __name__ == "__main__":
-    import sys
-
     # 也可以使用mitmproxy, mitmproxy要求interactive shell environment(交互式shell), 交互式shell在pycharm中需要使用terminal进行启动: python web/mitmproxy_script.py
     from mitmproxy.tools.main import mitmweb
 
     # 使用当前脚本当成mitmweb的脚本
-    sys.argv = ["mitmweb", "-s", __file__, "-p", "18888"]
-    if sys.argv[0] == "mitmweb":
-        sys.argv += ["--web-port", "18081"]
-    mitmweb()
+    mitmweb(["-s", __file__, "-p", "18888", "--web-port", "18081"])
+
+
+def start_mitm_for_test():
+    """给测试使用, 需要新开进程,否则会阻塞住测试"""
+    global proc
+    from mitmproxy.tools.main import mitmweb
+
+    proc = Process(target=mitmweb, kwargs={"args": ["-s", __file__, "-p", "18888", "--web-port", "18081"]})
+    proc.start()
+    print("start server")
+    return proc
+
+
+def stop_mitm_for_test():
+    pid = proc.pid
+    parent = psutil.Process(pid)
+    for child in parent.children(recursive=True):
+        child.kill()
+    proc.terminate()
+    print("stop mitm")

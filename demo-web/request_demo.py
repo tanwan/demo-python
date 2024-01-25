@@ -2,37 +2,46 @@ import requests
 import unittest
 import json
 import requests.utils
+from .fastapi_demo import start_server_for_test, stop_server_for_test
+import time
 
 # 调用fastapi_demo.py的启动的后端
 host = "http://127.0.0.1:8080/rest"
 
 
 class RequestDemo(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        start_server_for_test()
+        time.sleep(1)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        stop_server_for_test()
+
     def test_get(self):
         """get和query parameter"""
         # 请求参数跟url一起
         res = requests.get(f"{host}/get/path?required_query_parameters=required value")
         print(res.text)
-        params = {"required_query_parameters": "required value", "optional_query_parameters": "optional value"}
+
         # 请求参数使用params传参
-        res = requests.get(f"{host}/get/path", params=params)
+        res = requests.get(f"{host}/get/path", params={"required_query_parameters": "required value", "optional_query_parameters": "optional value"})
         print(res.text)
 
     def test_post(self):
         """post和request body,response body"""
-        # 需要先转换为json字符串
-        payload = json.dumps({"required_field": "required value"})
-        # 使用data传参
-        res = requests.post(f"{host}/post", data=payload)
+        # 使用data传参, 需要先转换为json字符串
+        res = requests.post(f"{host}/post", data=json.dumps({"required_field": "required value"}))
         # 读取成dict
         result_json = res.json()
-        print(f"type:{type(result_json)},result:{result_json}")
+        self.assertTrue(isinstance(result_json, dict))
+        print(result_json)
 
     def test_put(self):
         """put"""
         # 需要先转换为json字符串
-        payload = json.dumps({"required_field": "required value"})
-        res = requests.put(f"{host}/put/1", data=payload)
+        res = requests.put(f"{host}/put/1", data=json.dumps({"required_field": "required value"}))
         print(res.json())
 
     def test_delete(self):
@@ -43,23 +52,19 @@ class RequestDemo(unittest.TestCase):
     def test_form_data(self):
         """form表单请求(文件上传也是使用此格式)"""
         # form表单不需要转换成json字符串
-        payload = {"form_field": "form field value"}
-        res = requests.post(f"{host}/form-data", data=payload)
+        res = requests.post(f"{host}/form-data", data={"form_field": "form field value"})
         print(res.text)
 
     def test_form_urlencoded(self):
         """普通的form表单请求"""
         # 多个参数使用&连接
-        payload = "form_field=form field value&k2=v2"
-        headers = {"Content-Type": "application/x-www-form-urlencoded"}
-        res = requests.post(f"{host}/form-data", headers=headers, data=payload)
+        res = requests.post(f"{host}/form-data", headers={"Content-Type": "application/x-www-form-urlencoded"}, data="form_field=form field value&k2=v2")
         print(res.text)
 
     def test_header(self):
         """header 请求头和响应头"""
         # 这边也可以设置cookie,并且这边设置的会覆盖使用cookie设置的值
-        headers = {"simple-header": "simple header value"}
-        res = requests.get(f"{host}/headers", headers=headers)
+        res = requests.get(f"{host}/headers", headers={"simple-header": "simple header value"})
         # 响应头
         print(res.headers)
         print(res.text)
@@ -67,8 +72,7 @@ class RequestDemo(unittest.TestCase):
     def test_cookie(self):
         """cookie 请求cookie和响应cookie"""
         # 这边设置的cookie可以被使用headers设置的cookie覆盖
-        cookies = {"simple_cookie": "simple cookie value"}
-        res = requests.get(f"{host}/cookies", cookies=cookies)
+        res = requests.get(f"{host}/cookies", cookies={"simple_cookie": "simple cookie value"})
         # 响应的cookie
         print(res.cookies)
         print(res.text)
