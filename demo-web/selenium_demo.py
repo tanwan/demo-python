@@ -6,6 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 import unittest
 import time
 from bs4 import BeautifulSoup
+from selenium.webdriver.chrome.options import Options
 
 
 class SeleniumDemo(unittest.TestCase):
@@ -14,20 +15,48 @@ class SeleniumDemo(unittest.TestCase):
         网页源码
         driver.page_source: 网页源码, 可以交给soup处理
         """
-        driver = webdriver.Chrome(service=webdriver.ChromeService(ChromeDriverManager().install()))
+        chrome_options = Options()
+
+        chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+        chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        driver = webdriver.Chrome(service=webdriver.ChromeService(ChromeDriverManager().install()), options=chrome_options)
+
+        # 将webdriver属性置为undefined
+        driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {"source": 'Object.defineProperty(navigator, "webdriver", {get: () => undefined})'})
+
         # 隐性等待设置了一个最长等待时间,如果在规定时间内网页加载完成,则执行下一步,否则一直等到时间截止,然后执行下一步
         driver.implicitly_wait(5)
-        driver.get("https://www.baidu.com")
+        driver.get("https://tp.wjx.top/vm/PcT5zae.aspx")
 
         # 显式等待 通过条件去判断
         # presence_of_element_located: 元素在dom里面
         # visibility_of: 元素可见
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "form")))
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "q1_28")))
 
-        # driver.page_source: 网页源码, 可以交给soup处理
-        soup = BeautifulSoup(driver.page_source, features="lxml")
-        all_a = soup.select("form")
-        print(all_a)
+        driver.find_element(By.ID, "q1_28").find_element(By.XPATH, "..").find_element(By.XPATH, "..").click()
+        time.sleep(1)
+        driver.find_element(By.ID, "q1_27").find_element(By.XPATH, "..").find_element(By.XPATH, "..").click()
+        time.sleep(1)
+        driver.find_element(By.ID, "q1_26").find_element(By.XPATH, "..").find_element(By.XPATH, "..").click()
+        time.sleep(1)
+        driver.find_element(By.ID, "q1_25").find_element(By.XPATH, "..").find_element(By.XPATH, "..").click()
+        time.sleep(1)
+        driver.find_element(By.ID, "q1_24").find_element(By.XPATH, "..").find_element(By.XPATH, "..").click()
+        time.sleep(1)
+        driver.find_element(By.ID, "q1_23").find_element(By.XPATH, "..").find_element(By.XPATH, "..").click()
+        time.sleep(1)
+        driver.find_element(By.ID, "q1_22").find_element(By.XPATH, "..").find_element(By.XPATH, "..").click()
+        time.sleep(1)
+        driver.find_element(By.ID, "q1_21").find_element(By.XPATH, "..").find_element(By.XPATH, "..").click()
+        time.sleep(1)
+        driver.find_element(By.ID, "q1_20").find_element(By.XPATH, "..").find_element(By.XPATH, "..").click()
+        time.sleep(1)
+        driver.find_element(By.ID, "q1_19").find_element(By.XPATH, "..").find_element(By.XPATH, "..").click()
+        time.sleep(2)
+        driver.find_element(By.ID, "ctlNext").click()
+        time.sleep(2)
+        driver.find_element(By.ID, "SM_BTN_1").click()
+        time.sleep(10)
 
     def test_find_element_by_id(self):
         """

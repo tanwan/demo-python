@@ -4,10 +4,11 @@ from pathlib import Path
 
 # __file__是当前脚本所在的路径
 curdir = Path(__file__).parent
-file_dir = curdir/".file"
+file_dir = curdir / ".file"
 tmp_dir = Path(file_dir / "tmp")
 tmp_dir.mkdir(parents=True, exist_ok=True)
 original_workdir = os.getcwd()
+
 
 class OSDemo(unittest.TestCase):
     def setUp(self) -> None:
@@ -28,9 +29,10 @@ class OSDemo(unittest.TestCase):
         """创建软链接"""
         link = "tmp/link"
         if os.path.islink(link):
+            # 删除软链接
             os.unlink(link)
         # src: 绝对路径, dest: 支持相对路径
-        os.symlink(file_dir/"dir", link)
+        os.symlink(file_dir / "dir", link)
 
     def test_file_stat(self):
         """获取文件属性"""
@@ -55,7 +57,7 @@ class OSDemo(unittest.TestCase):
             pass
         # 只能是文件, 必须存在
         os.remove("tmp/remove.txt")
-    
+
     def test_rmdir(self):
         """删除空文件夹"""
         os.makedirs("tmp/remove")
