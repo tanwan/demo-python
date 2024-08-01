@@ -10,7 +10,6 @@ curdir = Path(__file__).parent
 file_dir = curdir / ".file"
 tmp_dir = Path(file_dir / "tmp")
 tmp_dir.mkdir(parents=True, exist_ok=True)
-original_workdir = os.getcwd()
 shutil_demo = ShutilDemo()
 os_demo = OSDemo()
 path_demo = PathDemo()
@@ -52,6 +51,16 @@ class FileDemo(unittest.TestCase):
         with open(tmp_dir / "tmp", "w") as file:
             file.write("write content")
 
+    def test_read_then_write_file(self):
+        """先读文件,后写"""
+        self.test_write_file()
+        # 文件写,w:覆盖写,a:追加写
+        with open(tmp_dir / "tmp", "r+") as file:
+            print(file.read())
+            # 回到文件游标指回开头,否则写入将变成追回
+            file.seek(0)
+            file.write("override write content")
+
     @unittest.skip("在相应的测试类执行")
     def test_copy(self):
         """复制文件(夹)"""
@@ -82,7 +91,7 @@ class FileDemo(unittest.TestCase):
         """移动/重命名文件(夹)"""
         os_demo.test_rename()
         shutil_demo.test_move()
-    
+
     @unittest.skip("在相应的测试类执行")
     def test_file_stat(self):
         """获取文件属性"""

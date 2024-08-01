@@ -171,6 +171,17 @@ class ListDemo(unittest.TestCase):
         # count
         print("cnt:", lst.count(1))
 
+    def test_find(self):
+        """
+        从list查找元素
+        获取一个使用next
+        获取多个使用列表推导
+        """
+        lst = [1, 2, 3, 4, 5]
+        print("find one: ", next(e for e in lst if e > 3))
+        # 没有符合的元素时,next会抛StopIteration异常, 可以指定默认值
+        print("find one: ", next((e for e in lst if e > 5), None))
+
     def test_random(self):
         """随机获取list的元素"""
         lst = [1, 2, 3, 4, 5]

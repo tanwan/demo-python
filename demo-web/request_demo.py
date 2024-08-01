@@ -4,6 +4,7 @@ import json
 import requests.utils
 from .fastapi_demo import start_server_for_test, stop_server_for_test
 import time
+from requests.auth import HTTPBasicAuth
 
 # 调用fastapi_demo.py的启动的后端
 host = "http://127.0.0.1:8080/rest"
@@ -65,6 +66,14 @@ class RequestDemo(unittest.TestCase):
         """header 请求头和响应头"""
         # 这边也可以设置cookie,并且这边设置的会覆盖使用cookie设置的值
         res = requests.get(f"{host}/headers", headers={"simple-header": "simple header value"})
+        # 响应头
+        print(res.headers)
+        print(res.text)
+
+    def test_auth(self):
+        """header auth"""
+        # basic auth, 也可以自定义auth
+        res = requests.get(f"{host}/headers", auth=HTTPBasicAuth("username", "password"))
         # 响应头
         print(res.headers)
         print(res.text)
