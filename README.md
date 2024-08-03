@@ -3,6 +3,8 @@
 ### 使用virtual env  
 `python -m venv .venv`: 在.venv文件夹创建虚拟环境  
 vscode: .vscode/settings.json添加`"python.defaultInterpreterPath":".venv/bin/python"`
+#### 升级python版本
+使用新版本的python执行`python -m venv .venv`, 或者使用`python -m venv .venv --upgrade`
 
 ### pip镜像
 `pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/`
@@ -27,7 +29,9 @@ vscode和pycharm直接执行此文件即可
 #### vscode
 vscode这边是借助Python Test Explorer for Visual Studio Code这个插件来执行单测的, 它根据.vscode/settings.json的`python.testing.unittestArgs`配置项来搜索文件,
 这边直接配置了'*.py',同时搜索路径使用项目根路径,子目录的文件如果需要被搜索到,**则子目录需要添加一个空的`__init__.py`文件**  
-查看print输入的内容, run的话,需要打开OUTPUT(⇧+⌘+U),然后切换到Python Test Log, debug的话,则输入在DEBUG CONSOLE(⇧+⌘+Y)
+执行的入口文件其实是unittestadapter/execution.py, 可以使用`sys.argv[0]`查看, 这边的`sys.argv`是没有执行方法的信息的,
+这些信息是通过socket传递的, ms-python插件会启一个socket, 然后通过这个socket获取到需要执行的方法
+
 #### pycharm
 直接运行test方法即可
 

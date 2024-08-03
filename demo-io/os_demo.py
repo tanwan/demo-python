@@ -1,5 +1,6 @@
 import unittest
 import os
+import time
 from pathlib import Path
 
 # __file__是当前脚本所在的路径
@@ -39,6 +40,15 @@ class OSDemo(unittest.TestCase):
         # 可以是文件/文件夹, 支持相对路径
         file_stat = os.stat("dir/file")
         print(f"create time:{file_stat.st_ctime}, modify time:{file_stat.st_mtime}, size:{file_stat.st_size}")
+
+    def test_modify_time(self):
+        """修改文件属性(访问时间,修改时间)"""
+        file = "dir/file"
+        print("before modify:", (os.path.getatime(file), os.path.getmtime(file)))
+        # 可以是文件/文件夹, 支持相对路径
+        # 默认为当前时间, 或者参数为tuple, 表示访问时间和修改时间
+        os.utime(file, (time.time(), time.time()))
+        print("after modify:", (os.path.getatime(file), os.path.getmtime(file)))
 
     def test_file_exist(self):
         """判断文件存在"""

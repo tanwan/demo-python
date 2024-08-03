@@ -1,18 +1,22 @@
 import unittest
 import os
 from pathlib import Path
-from .shutil_demo import ShutilDemo
-from .os_demo import OSDemo
-from .path_demo import PathDemo
+
+# 如果使用from .shutil_demo import ShutilDemo, 那么在执行ShutilDemo的测试方法时, 方法会被执行两次
+# 原因是unittest在监测测试类时是将测试文件通过__import__()导入成模块的, 如果使用了from .shutil_demo import ShutilDemo,那么此方件被导入后, 此模块也会存在ShutilDemo
+from . import shutil_demo
+from . import os_demo
+from . import path_demo
 
 # __file__是当前脚本所在的路径
 curdir = Path(__file__).parent
 file_dir = curdir / ".file"
 tmp_dir = Path(file_dir / "tmp")
 tmp_dir.mkdir(parents=True, exist_ok=True)
-shutil_demo = ShutilDemo()
-os_demo = OSDemo()
-path_demo = PathDemo()
+
+shutil_demo_test = shutil_demo.ShutilDemo()
+os_demo_test = os_demo.OSDemo()
+path_demo_test = path_demo.PathDemo()
 
 
 class FileDemo(unittest.TestCase):
@@ -65,35 +69,35 @@ class FileDemo(unittest.TestCase):
     def test_copy(self):
         """复制文件(夹)"""
         # 复制文件
-        shutil_demo.test_copy()
-        shutil_demo.test_copyfile()
+        shutil_demo_test.test_copy()
+        shutil_demo_test.test_copyfile()
         # 复制文件夹
-        shutil_demo.test_copytree()
+        shutil_demo_test.test_copytree()
 
     @unittest.skip("在相应的测试类执行")
     def test_create_dir(self):
         """创建文件夹"""
-        os_demo.test_makedirs()
-        path_demo.test_mkdir()
+        os_demo_test.test_makedirs()
+        path_demo_test.test_mkdir()
 
     @unittest.skip("在相应的测试类执行")
     def test_remove(self):
         """删除文件(夹)"""
         # 删除文件
-        os_demo.test_remove()
+        os_demo_test.test_remove()
         # 删除文件夹(空/非空)
-        shutil_demo.test_rmtree()
+        shutil_demo_test.test_rmtree()
         # 删除空文件夹
-        os_demo.test_rmdir()
+        os_demo_test.test_rmdir()
 
     @unittest.skip("在相应的测试类执行")
     def test_move(self):
         """移动/重命名文件(夹)"""
-        os_demo.test_rename()
-        shutil_demo.test_move()
+        os_demo_test.test_rename()
+        shutil_demo_test.test_move()
 
     @unittest.skip("在相应的测试类执行")
     def test_file_stat(self):
         """获取文件属性"""
-        os_demo.test_file_stat()
-        path_demo.test_file_stat()
+        os_demo_test.test_file_stat()
+        path_demo_test.test_file_stat()
