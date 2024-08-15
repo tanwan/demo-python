@@ -1,13 +1,18 @@
 import requests
 import unittest
 import json
+import shutil
+from pathlib import Path
 import requests.utils
 from .fastapi_demo import start_server_for_test, stop_server_for_test
 import time
 from requests.auth import HTTPBasicAuth
 
+tmp_dir = Path(Path(__file__).parent / ".file/tmp")
+tmp_dir.mkdir(parents=True, exist_ok=True)
+
 # 调用fastapi_demo.py的启动的后端
-host = "http://127.0.0.1:8080/rest"
+host = "http://127.0.0.1:28080/rest"
 
 
 class RequestDemo(unittest.TestCase):
@@ -77,6 +82,13 @@ class RequestDemo(unittest.TestCase):
         # 响应头
         print(res.headers)
         print(res.text)
+
+    def test_download(self):
+        """下载文件"""
+        # 需要使用stream=True
+        res = requests.get(f"{host}/get/path?required_query_parameters=required value", stream=True)
+        with open(tmp_dir / "file", "wb") as f:
+            shutil.copyfileobj(res.raw, f)
 
     def test_cookie(self):
         """cookie 请求cookie和响应cookie"""

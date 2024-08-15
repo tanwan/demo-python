@@ -94,7 +94,7 @@ def start_server():
     # 使用uvicorn作为fastapi的服务器
     # uvicorn是一个ASGI服务器(一个介于网络协议服务和Python应用之间的标准接口,能够处理多种通用的协议类型,包括HTTP/HTTP2和WebSocket)
     # 这边的app为FastAPI()的实例的所在的脚本名称+实例的名称
-    uvicorn.run(app=f"{__name__}:app", host="0.0.0.0", port=8080)
+    uvicorn.run(app=f"{__name__}:app", host="0.0.0.0", port=28080)
 
 
 def start_server_for_test():
@@ -102,7 +102,7 @@ def start_server_for_test():
     global proc
     proc = Process(
         target=uvicorn.run,
-        kwargs={"app": f"{__name__}:app", "host": "0.0.0.0", "port": 8080},
+        kwargs={"app": f"{__name__}:app", "host": "0.0.0.0", "port": 28080},
     )
     proc.start()
     print("start server")

@@ -51,7 +51,7 @@ class MathDemo(unittest.TestCase):
         # 其它近似方法使用quantize, .01表示保留两位小数
         self.assertEqual(decimal.Decimal("2.68"), decimal.Decimal("2.675").quantize(decimal.Decimal(".01"), rounding=decimal.ROUND_HALF_UP))
 
-    def test_convertion_between_float_deciaml(self):
+    def test_convert_between_float_deciaml(self):
         """
         decimal与浮点的转换
         浮点 -> decimal: 需要转为字符串,否则有精度问题
@@ -61,7 +61,7 @@ class MathDemo(unittest.TestCase):
         print(decimal.Decimal(str(2.685)))
         print(float(decimal.Decimal("2.685")))
 
-    def test_decimal_conversion(self):
+    def test_decimal_convert(self):
         """
         进制转换
         bin 二进制

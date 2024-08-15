@@ -4,7 +4,7 @@
 `python -m venv .venv`: 在.venv文件夹创建虚拟环境  
 vscode: .vscode/settings.json添加`"python.defaultInterpreterPath":".venv/bin/python"`
 #### 升级python版本
-使用新版本的python执行`python -m venv .venv`, 或者使用`python -m venv .venv --upgrade`
+删除原有的.venv, 然后使用新版本的python执行`python -m venv .venv`
 
 ### pip镜像
 `pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/`
@@ -16,9 +16,9 @@ vscode: .vscode/settings.json添加`"python.defaultInterpreterPath":".venv/bin/p
 
 #### 升级
 升级pip: `pip install --upgrade pip`  
-升级所有的包: `pip freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U`  
 查看可以升级的包: `pip list --outdated`  
-升级后记得再写入requirements.txt
+升级所有的包: `pip freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U`  
+升级后记得再写入requirements.txt: `pip freeze > requirements.txt`
 
 
 ## 执行
