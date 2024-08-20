@@ -25,7 +25,8 @@ class PDFDemo(unittest.TestCase):
         # lattice: True 使用表格的边框来确定数据单元格, 适用于有明显边框的表格pdf
         # stream: True 通过检测文本的连续性来识别表格中的数据, 适用于没有明显边框的pdf
         # password: 密码
-        dfs = tabula.read_pdf("demo.pdf", pages="all", stream=True)
+        # pandas_options={"header": None}: 默认情况下tabula会将第一行当作列名, 使用此参数可以忽略
+        dfs = tabula.read_pdf("demo.pdf", pages="all", stream=True, pandas_options={"header": None})
         # 读取出来的df是一个list,元素为DataFrame(二维表格型数据)
         print(dfs)
 
