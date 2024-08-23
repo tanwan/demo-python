@@ -26,7 +26,7 @@ class ReadFileDemo(unittest.TestCase):
 
     def test_read_excel(self):
         """
-        读取excel
+        读取excel, 支持xls和xlsx
         header: 指定header所在的行数,None表示没有Header
         sheet_name: 指定sheet名称, 不指定默认读取active的sheet, sheet_name=None则读取所有的sheet,并且返回值为dict{sheetName:DataFrame}
         """
