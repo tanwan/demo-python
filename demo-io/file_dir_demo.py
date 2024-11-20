@@ -19,7 +19,7 @@ os_demo_test = os_demo.OSDemo()
 path_demo_test = path_demo.PathDemo()
 
 
-class FileDemo(unittest.TestCase):
+class FileDirDemo(unittest.TestCase):
     def test_walk(self):
         """使用os.walk递归遍历文件夹下的所有文件"""
         # root是遍历时的root路径, dirs是root底下所有的目录, files是root下面所有的文件
@@ -33,37 +33,10 @@ class FileDemo(unittest.TestCase):
             for dir in dirs:
                 print(f"dir:{os.path.join(root, dir)}")
 
-    def test_read_file(self):
-        """读文件"""
-        with open(file_dir / "file") as file:
-            # 一次性读全部
-            print(f"read all:{file.read()}")
-        with open(file_dir / "file") as file:
-            # 按行
-            for line in file:
-                print(f"read by for line:{line}")
-        with open(file_dir / "file") as file:
-            # 使用readlines读取所有行
-            lines = file.readlines()
-            print(f"read lines:{lines}")
-        # 使用Path读取文件
-        print(f"use path read:{Path(file_dir / 'file').read_text()}")
-
-    def test_write_file(self):
-        """写文件"""
-        # 文件写,w:覆盖写,a:追加写
-        with open(tmp_dir / "tmp", "w") as file:
-            file.write("write content")
-
-    def test_read_then_write_file(self):
-        """先读文件,后写"""
-        self.test_write_file()
-        # 文件写,w:覆盖写,a:追加写
-        with open(tmp_dir / "tmp", "r+") as file:
-            print(file.read())
-            # 回到文件游标指回开头,否则写入将变成追回
-            file.seek(0)
-            file.write("override write content")
+    @unittest.skip("在相应的测试类执行")
+    def test_list_dir(self):
+        """列出文件夹下的文件"""
+        os_demo_test.test_list_dir()
 
     @unittest.skip("在相应的测试类执行")
     def test_copy(self):
@@ -82,13 +55,19 @@ class FileDemo(unittest.TestCase):
 
     @unittest.skip("在相应的测试类执行")
     def test_remove(self):
-        """删除文件(夹)"""
+        """删除文件"""
         # 删除文件
         os_demo_test.test_remove()
+        path_demo_test.test_unlink()
+
+    @unittest.skip("在相应的测试类执行")
+    def test_remove_dir(self):
+        """删除文件夹"""
         # 删除文件夹(空/非空)
         shutil_demo_test.test_rmtree()
         # 删除空文件夹
         os_demo_test.test_rmdir()
+        path_demo_test.test_remove_dir()
 
     @unittest.skip("在相应的测试类执行")
     def test_move(self):
