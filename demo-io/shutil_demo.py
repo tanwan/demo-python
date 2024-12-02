@@ -15,14 +15,18 @@ class ShutilDemo(unittest.TestCase):
         os.chdir(curdir / ".file")
         print(f"work directory: {os.getcwd()}")
         tmpdir.mkdir(exist_ok=True)
-    
+
     def tearDown(self) -> None:
         os.chdir(original_workdir)
 
     def test_copyfile(self):
-        """将file复制到tmp/file文件"""
+        """将file复制到tmp/file文件(不包括元数据,比如:创建时间)"""
         # copyfile: 复制文件, src/dest只能是文件, 支持相对路径, dest不会创建文件夹, 会覆盖掉已有的文件
         shutil.copyfile("file", "tmp/file")
+
+    def test_copy2(self):
+        """将file复制到tmp/file文件(包括元数据,比如:创建时间)"""
+        shutil.copy2("file", "tmp/file2")
 
     def test_copy(self):
         """将file复制到tmp文件夹下"""

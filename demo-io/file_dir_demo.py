@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 # 如果使用from .shutil_demo import ShutilDemo, 那么在执行ShutilDemo的测试方法时, 方法会被执行两次
-# 原因是unittest在监测测试类时是将测试文件通过__import__()导入成模块的, 如果使用了from .shutil_demo import ShutilDemo,那么此方件被导入后, 此模块也会存在ShutilDemo
+# 原因是unittest在监测测试类时是将测试文件通过__import__()导入成模块的, 如果使用了from .shutil_demo import ShutilDemo,那么此文件被导入后, 当前模块也会存在ShutilDemo
 from . import shutil_demo
 from . import os_demo
 from . import path_demo
@@ -37,13 +37,16 @@ class FileDirDemo(unittest.TestCase):
     def test_list_dir(self):
         """列出文件夹下的文件"""
         os_demo_test.test_list_dir()
+        path_demo_test.test_list_dir()
 
     @unittest.skip("在相应的测试类执行")
     def test_copy(self):
         """复制文件(夹)"""
-        # 复制文件
+        # 文件 -> 文件夹
         shutil_demo_test.test_copy()
+        # 文件 -> 文件
         shutil_demo_test.test_copyfile()
+        shutil_demo_test.test_copy2()
         # 复制文件夹
         shutil_demo_test.test_copytree()
 

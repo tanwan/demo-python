@@ -5,6 +5,7 @@ from pathlib import Path
 from stat import S_ISREG
 import pexpect
 import sys
+import subprocess
 
 curdir = Path(__file__).parent
 tmpDir = curdir / ".file/tmp/"
@@ -32,6 +33,28 @@ class ExecCommandDemo(unittest.TestCase):
         # 可以为命令行提供变量, 相当于在命令行在执行export
         os.environ["PARAM"] = "Demo"
         print("PARAM:" + os.popen("echo $PARAM").read())
+
+
+class SubprocessDemo(unittest.TestCase):
+
+    def test_subprocess(self):
+        """
+        命令使用数组传递
+        text=True: 输出使用文本而非字节
+        capture_output=True: 捕获输出流, 这样result.stdout才能获取出结果
+        """
+        result = subprocess.run(["ls", "-al"], text=True, capture_output=True)
+        print(result.stdout)
+
+    def test_run_shell(self):
+        """命令使用shell"""
+        result = subprocess.run("ls -al", text=True, shell=True, capture_output=True)
+        print(result.stdout)
+
+    def test_cwd(self):
+        """cwd: 指定执行工作路径"""
+        result = subprocess.run(["ls", "-al"], cwd=curdir, text=True, capture_output=True)
+        print(result.stdout)
 
 
 class PexpectDemo(unittest.TestCase):

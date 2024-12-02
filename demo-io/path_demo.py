@@ -78,3 +78,8 @@ class PathDemo(unittest.TestCase):
         path.mkdir()
         # 删除空文件夹,必须存在
         path.rmdir()
+
+    def test_list_dir(self):
+        """遍历文件夹"""
+        for item in Path(".").iterdir():
+            print(item)
