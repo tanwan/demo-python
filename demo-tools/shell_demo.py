@@ -6,6 +6,7 @@ from stat import S_ISREG
 import pexpect
 import sys
 import subprocess
+import stat
 
 curdir = Path(__file__).parent
 tmpDir = curdir / ".file/tmp/"
@@ -54,6 +55,21 @@ class SubprocessDemo(unittest.TestCase):
     def test_cwd(self):
         """cwd: 指定执行工作路径"""
         result = subprocess.run(["ls", "-al"], cwd=curdir, text=True, capture_output=True)
+        print(result.stdout)
+
+    def test_exec_sheel_script(self):
+        """执行shell脚本, 指定环境变量"""
+        shell_script = curdir / ".file/test.sh"
+        shell_script.chmod(shell_script.stat().st_mode | stat.S_IEXEC)
+
+        env = os.environ.copy()
+        env["env_var"] = "env var value"
+        # 使用数组执行shell脚本
+        result = subprocess.run(["/bin/bash", shell_script, "var1 value"], env=env, text=True, capture_output=True)
+        print(result.stdout)
+
+        # 使用脚本执行shell脚本
+        result = subprocess.run(str(shell_script) + " 'var1 value'", env=env, text=True, capture_output=True, shell=True)
         print(result.stdout)
 
 
