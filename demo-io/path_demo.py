@@ -11,17 +11,18 @@ tmp_dir.mkdir(parents=True, exist_ok=True)
 class PathDemo(unittest.TestCase):
     def test_path(self):
         """Path是PurePath的子类"""
-        # 传入相对路径,Path可以以当前工作路径得出绝对路径
-        print(f"absolute path:{Path('path1', 'path2', 'path3').absolute()}")
         # cwd获取当前工作路径,home获取用户路径
         print(f"cwd:{Path.cwd()},home:{Path.home()}")
-        # os.path.expanduser 将~解析成$HOME
+        # expanduser 将~解析成$HOME
+        print(Path("~/Downloads").expanduser())
         print(os.path.expanduser("~/Downloads"))
         # 拼接路径
         print(os.path.join("/root", "path"))
 
-    def test_path(self):
+    def test_relative_absolute_path(self):
         """Path"""
+        # 传入相对路径,Path可以以当前工作路径得出绝对路径
+        print(f"absolute path:{Path('path1', 'path2', 'path3').absolute()}")
         # 相对路径
         relative_path1 = Path("path1", "path2", "file_demo.py")
         relative_path2 = Path("path1/path2/file_demo.py")
@@ -80,6 +81,31 @@ class PathDemo(unittest.TestCase):
         path.rmdir()
 
     def test_list_dir(self):
-        """遍历文件夹"""
-        for item in Path(".").iterdir():
+        """
+        遍历文件夹
+        如果遍历的是绝对路径, 那么结果也是绝对路径
+        如果遍历的是相对路径, 那么结果也是相对路径(相对于工作路径)
+        """
+        # 如果遍历的是绝对路径, 那么结果也是绝对路径
+        for item in Path(curdir).iterdir():
+            # item也是Path
             print(item)
+        # 如果遍历的是相对路径, 那么结果也是相对路径(相对于工作路径)
+        for item in Path("demo-io").iterdir():
+            # item也是Path
+            print(item)
+
+    def test_glob(self):
+        """
+        如果遍历的是绝对路径, 那么结果也是绝对路径
+        如果遍历的是相对路径, 那么结果也是相对路径(相对于工作路径)
+        glob: 按给定模式遍历文件夹, 不会递归遍历
+        rglob: 按给定模式递归遍历文件夹
+        patthern: *: 匹配任意字符, ?: 匹配单个字符, [abc]: 匹配给定的单个字符
+        """
+        # 如果遍历的是相对路径, 那么结果也是相对路径(相对于工作路径)
+        for file in Path(".").glob("*"):
+            print(file)
+        # 如果遍历的是绝对路径, 那么结果也是绝对路径
+        for file in Path(curdir).rglob("json*"):
+            print(file)
