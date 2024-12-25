@@ -27,7 +27,7 @@ vscode和pycharm直接执行此文件即可
 ### 执行单个方法
 这边需要借助单元测试,所以需要继承`unittest.TestCase`类,**并且要运行的方法名要以test开头**,
 #### vscode
-vscode这边是借助Python Test Explorer for Visual Studio Code这个插件来执行单测的, 它根据.vscode/settings.json的`python.testing.unittestArgs`配置项来搜索文件,
+vscode这边是借助ms-python.python这个插件来执行单测的, 它根据.vscode/settings.json的`python.testing.unittestArgs`配置项来搜索文件,
 这边直接配置了'*.py',同时搜索路径使用项目根路径,子目录的文件如果需要被搜索到,**则子目录需要添加一个空的`__init__.py`文件**  
 执行的入口文件其实是unittestadapter/execution.py, 可以使用`sys.argv[0]`查看, 这边的`sys.argv`是没有执行方法的信息的,
 这些信息是通过socket传递的, ms-python插件会启一个socket, 然后通过这个socket获取到需要执行的方法
