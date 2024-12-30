@@ -30,7 +30,7 @@ class AutoGUIDemo(unittest.TestCase):
         print(pyautogui.size())
         # 坐标是否在屏幕范围内
         print(pyautogui.onScreen(200, 200))
-        # 屏幕截图, 目前pyscreeze版本不兼容
+        # 屏幕截图
         img = pyautogui.screenshot(region=(100, 100, 200, 200))
         # 保存截图
         img.save(tmpDir / "screenshot.png")
