@@ -7,10 +7,11 @@ from openai import OpenAI
 class DeepSeekDemo(unittest.TestCase):
 
     def setUp(self) -> None:
-        # 设置环境变量: export DS_API_KEY=""
+        # 设置环境变量: export DEEPSEEK_API_KEY=""
         # 这边使用deepseek, 符合openai的规范, 可以直接使用openai的sdk
         # See https://api-docs.deepseek.com/zh-cn/
-        api_key = os.getenv("DS_API_KEY")
+        api_key = os.getenv("DEEPSEEK_API_KEY")
+        self.model = "deepseek-chat"
         self.client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com/v1")
 
     def test_completion(self):
@@ -28,7 +29,7 @@ class DeepSeekDemo(unittest.TestCase):
             {"role": "user", "content": "写一首诗"},
         ]
         response_format = {"type": "json_object"}
-        response = self.client.chat.completions.create(model="deepseek-chat", messages=messages, response_format=response_format)
+        response = self.client.chat.completions.create(model=self.model, messages=messages, response_format=response_format)
         # 回答为response.choices[0].message.content
         print(response.choices[0].message)
         print(json.loads(response.choices[0].message.content))
@@ -40,7 +41,7 @@ class DeepSeekDemo(unittest.TestCase):
         """
         # 第一轮
         messages = [{"role": "system", "content": "只需要给出答案"}, {"role": "user", "content": "世界第一高峰的哪一个"}]
-        response = self.client.chat.completions.create(model="deepseek-chat", messages=messages)
+        response = self.client.chat.completions.create(model=self.model, messages=messages)
 
         messages.append(response.choices[0].message)
         print(f"Messages Round 1: {messages}")
@@ -48,7 +49,7 @@ class DeepSeekDemo(unittest.TestCase):
         # 第二轮
         messages.append({"role": "user", "content": "世界第二呢"})
         # 相当于[{"role": "system", "content": "只需要给出答案"}, {"role": "user", "content": "世界第一高峰的哪一个"}, {"role":"assistant", "content":"珠穆朗玛峰"}, {"role": "user", "content": "世界第二呢"}]
-        response = self.client.chat.completions.create(model="deepseek-chat", messages=messages)
+        response = self.client.chat.completions.create(model=self.model, messages=messages)
         print(f"Messages Round 2: {response.choices[0].message}")
 
     def test_reasoner(self):
@@ -88,13 +89,13 @@ class DeepSeekDemo(unittest.TestCase):
                                 "description": "The date of the weather for this location",
                             },
                         },
-                        "required": ["location", "date"],
+                        "required": ["location"],
                     },
                 },
             },
         ]
         messages = [{"role": "user", "content": "厦门2025-01-01的天气怎么样"}]
-        response = self.client.chat.completions.create(model="deepseek-chat", messages=messages, tools=tools)
+        response = self.client.chat.completions.create(model=self.model, messages=messages, tools=tools)
         message = response.choices[0].message
         print(message)
         tool_call = message.tool_calls[0]
@@ -103,8 +104,8 @@ class DeepSeekDemo(unittest.TestCase):
 
         # 传加上次AI的回答和调用外部函数的结果
         messages.append(message)
-        messages.append({"role": "tool", "tool_call_id": tool_call.id, "content": "24℃"})
-        response = self.client.chat.completions.create(model="deepseek-chat", messages=messages, tools=tools)
+        messages.append({"role": "tool", "tool_call_id": tool_call.id, "content": answer})
+        response = self.client.chat.completions.create(model=self.model, messages=messages, tools=tools)
         print(f"answer: {response.choices[0].message.content}")
 
     def call_function(self, name, args):
