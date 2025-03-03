@@ -6,7 +6,7 @@ from langchain_core.output_parsers import StrOutputParser
 import unittest
 
 
-class DeepSeekDemo(unittest.TestCase):
+class LangChainDemo(unittest.TestCase):
     def setUp(self) -> None:
         # 设置环境变量: export DEEPSEEK_API_KEY=""
         self.model = ChatDeepSeek(

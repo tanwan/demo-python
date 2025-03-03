@@ -63,6 +63,16 @@ class DeepSeekDemo(unittest.TestCase):
         # 比对话多了个reasoning_content的字段
         print(response.choices[0].message)
 
+    def test_mock_rag(self):
+        """模拟rag"""
+        # 模拟从向量数据库检索出来的结果
+        context = "数学成绩出来了, 小明考了100分, 小红考了99分, 小乐考了90分"
+        question = "谁的成绩最好?"
+        # 将上下文和问题一起传给ai
+        messages = [{"role": "system", "content": "你会根据提供的上下文, 回答用户的问题"}, {"role": "user", "content": f"{question}, 上下文:{context}"}]
+        response = self.client.chat.completions.create(model=self.model, messages=messages)
+        print(response.choices[0].message.content)
+
     def test_function_call(self):
         """
         方法调用
