@@ -12,8 +12,6 @@ class HTTPRequest(BaseHTTPRequestHandler):
         self.error_code = self.error_message = None
         self.parse_request()
 
-        self.headers = dict(self.headers)
-
         try:
             self.data = raw_http_request[raw_http_request.index("\n\n") + 2 :].rstrip()
         except ValueError:
@@ -30,9 +28,10 @@ def to_curl(raw_http_request):
     request = HTTPRequest(raw_http_request.strip())
     print(raw_http_request)
     curl = f"curl --location --request {request.command} '{request.url}{request.path}' "
-    request.headers.pop("Content-Length", None)
     boundary = None
     for k, v in sorted(request.headers.items()):
+        if k == "Content-Length":
+            continue
         if k == "Content-Type" and v.startswith("multipart/form-data"):
             boundary = v.split(";")[1].replace("boundary=", "").strip()
         curl += f"-H '{k}: {v}' "
@@ -47,7 +46,6 @@ def to_curl(raw_http_request):
                     values = re.findall(f'name="{name}"\n\n(\w+)\n', param)
                     if values:
                         curl += f"--form '{name}=\"{values[0]}\"'"
-            None
         else:
             if isinstance(data, bytes):
                 data = data.decode("utf-8")
